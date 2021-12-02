@@ -219,6 +219,26 @@ services:
     ports:
       - "50000:50000"
 
+  testmsapi:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - PORT=80
+    ports:
+      - "5380:80"
+      - "5381:443"
+
+  testmsapi-dapr:
+    command: ["./daprd",
+      "-app-id", "testmsapi",
+      "-app-port", "80",
+      "-components-path", "/components",
+      "-config", "/configuration/eshop-config.yaml"
+      ]
+    volumes:
+      - "./dapr/components/:/components"
+      - "./dapr/configuration/:/configuration"
+
 volumes:
   eshop-sqldata:
     external: false

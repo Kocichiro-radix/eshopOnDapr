@@ -87,6 +87,13 @@ static_resources:
                   auto_host_rewrite: true
                   prefix_rewrite: "/v1.0/invoke/basket-api/method/"
                   cluster: dapr
+              - name: "t-long"
+                match:
+                  prefix: "/testmsapi/"
+                route:
+                  auto_host_rewrite: true
+                  prefix_rewrite: "/v1.0/invoke/testmsapi/method/"
+                  cluster: dapr
               - name: "agg"
                 match:
                   prefix: "/"
@@ -139,4 +146,12 @@ static_resources:
     hosts:
     - socket_address:
         address: ordering-api
+        port_value: 80
+  - name: testmsapi
+    connect_timeout: 0.25s
+    type: strict_dns
+    lb_policy: round_robin
+    hosts:
+    - socket_address:
+        address: testmsapi
         port_value: 80

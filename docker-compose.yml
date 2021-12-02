@@ -118,3 +118,16 @@ services:
 
   dapr-placement:
     image: "daprio/dapr:1.0.0"
+
+  testmsapi:
+    build:
+      context: .
+      dockerfile: src/Services/TestMS/TestMSApi/Dockerfile
+    depends_on:
+      - sqldata
+
+  testmsapi-dapr:
+    image: "daprio/daprd:1.4.0"
+    network_mode: "service:testmsapi"
+    depends_on:
+      - testmsapi
