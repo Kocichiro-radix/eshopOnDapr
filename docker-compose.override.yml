@@ -100,6 +100,7 @@ services:
       - BasketApiUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5103
       - OrderingApiUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5102
       - ShoppingAggregatorApiUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5121
+      - TestMSApiUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5380
     ports:
       - "5105:80"
 
@@ -223,6 +224,8 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
+      - IdentityUrl=http://identity-api
+      - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
       - PORT=80
       - SqlConnectionString=userid=docker_user;pwd=docker_pass;database=docker_db;server=mysql;
     ports:

@@ -125,6 +125,7 @@ services:
       dockerfile: src/Services/TestMS/TestMSApi/Dockerfile
     depends_on:
       - mysql
+      - identity-api
 
   testmsapi-dapr:
     image: "daprio/daprd:1.4.0"

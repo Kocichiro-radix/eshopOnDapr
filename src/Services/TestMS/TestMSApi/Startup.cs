@@ -10,9 +10,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 using TestMSApi.Infrastructure;
+using TestMSApi.Infrastructure.Filters;
 using TestMSApi.Seed;
 
 namespace TestMSApi
@@ -40,6 +42,47 @@ namespace TestMSApi
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "eShopOnDapr - TestMSApi", Version = "v1" });
+
+                var identityUrlExternal = Configuration.GetValue<string>("IdentityUrlExternal");
+
+                c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.OAuth2,
+                    Flows = new OpenApiOAuthFlows()
+                    {
+                        Implicit = new OpenApiOAuthFlow()
+                        {
+                            AuthorizationUrl = new Uri($"{identityUrlExternal}/connect/authorize"),
+                            TokenUrl = new Uri($"{identityUrlExternal}/connect/token"),
+                            Scopes = new Dictionary<string, string>()
+                            {
+                                { "testms", "TestMS API" }
+                            }
+                        }
+                    }
+                });
+
+                c.OperationFilter<AuthorizeCheckOperationFilter>();
+            });
+
+            // Prevent mapping "sub" claim to nameidentifier.
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
+
+            services.AddAuthentication("Bearer")
+                .AddJwtBearer(options =>
+                {
+                    options.Audience = "testmsapi";
+                    options.Authority = Configuration.GetValue<string>("IdentityUrl");
+                    options.RequireHttpsMetadata = false;
+                });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("ApiScope", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim("scope", "testms");
+                });
             });
 
             services.AddCors(options =>
@@ -71,6 +114,8 @@ namespace TestMSApi
                 app.UseSwaggerUI(c => 
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "TestMSApi v1");
+                    c.OAuthClientId("testmsswaggerui");
+                    c.OAuthAppName("TestMS Swagger UI");
                 });
             }
 
@@ -78,8 +123,8 @@ namespace TestMSApi
 
             app.UseRouting();
 
-            //app.UseAuthentication();
-            //app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseCors("CorsPolicy");
 
             app.UseEndpoints(endpoints =>
