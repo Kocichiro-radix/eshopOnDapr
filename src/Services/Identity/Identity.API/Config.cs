@@ -19,7 +19,8 @@ namespace Microsoft.eShopOnDapr.Services.Identity.API
             {
                 new ApiScope("basket", "Access to Basket API"),
                 new ApiScope("ordering", "Access to Ordering API"),
-                new ApiScope("shoppingaggr", "Access to Shopping Aggregator API")
+                new ApiScope("shoppingaggr", "Access to Shopping Aggregator API"),
+                new ApiScope("testms", "Access to TestMS API"),
             };
     
         public static IEnumerable<ApiResource> ApiResources =>
@@ -37,6 +38,11 @@ namespace Microsoft.eShopOnDapr.Services.Identity.API
                 new ApiResource("shoppingaggr-api", "Shopping Aggregator API")
                 {
                     Scopes = { "shoppingaggr" }
+                },
+                new ApiResource("testmsapi", "TestMS API")
+                {
+                    Scopes = { "testms" }
+
                 }
             };
 
@@ -71,7 +77,8 @@ namespace Microsoft.eShopOnDapr.Services.Identity.API
                         IdentityServerConstants.StandardScopes.Profile,
                         "basket",
                         "ordering",
-                        "shoppingaggr"
+                        "shoppingaggr",
+                        "testms"
                     },
                 },
                 new Client
@@ -118,6 +125,21 @@ namespace Microsoft.eShopOnDapr.Services.Identity.API
                     {
                         "basket",
                         "shoppingaggr"
+                    }
+                },
+                new Client
+                {
+                    ClientId = "testmsswaggerui",
+                    ClientName = "TestMS Swagger UI",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+
+                    RedirectUris = { $"{configuration["TestMSApiUrlExternal"]}/swagger/oauth2-redirect.html" },
+                    PostLogoutRedirectUris = { $"{configuration["TestMSApiUrlExternal"]}/swagger/" },
+
+                    AllowedScopes =
+                    {
+                        "testms"
                     }
                 }
             };

@@ -50,7 +50,7 @@ namespace TestMSApi.Controllers
             return Ok(0);
         }
 
-        //[Authorize(Policy = "ApiScope")]
+        [Authorize(Policy = "ApiScope")]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
