@@ -31,6 +31,9 @@
       "commandName": "Docker",
       "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
+      "environmentVariables": {
+        "SqlConnectionString": "Server=tcp:127.0.0.1,3306;Database=docker_db;User=docker_user;Password=docker_pass;"
+      },
       "publishAllPorts": true,
       "useSSL": true
     }

@@ -124,10 +124,61 @@ services:
       context: .
       dockerfile: src/Services/TestMS/TestMSApi/Dockerfile
     depends_on:
-      - sqldata
+      - mysql
 
   testmsapi-dapr:
     image: "daprio/daprd:1.4.0"
     network_mode: "service:testmsapi"
     depends_on:
       - testmsapi
+
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: docker_db
+      MYSQL_USER: docker_user
+      MYSQL_PASSWORD: docker_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./docker/db/data:/var/lib/mysql
+      - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      - mysql
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOSTS=mysql
+      - PMA_USER=docker_user
+      - PMA_PASSWORD=docker_pass
+    ports:
+      - "3000:80"
+    volumes:
+      - ./docker/phpmyadmin/sessions:/sessions
+
+  #mysql:
+  #  image: mysql:latest
+  #  command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
+  #  environment:
+  #    MYSQL_DATABASE: TestApi
+  #    MYSQL_USER: testmsapi
+  #    MYSQL_PASSWORD: password
+  #    MYSQL_ROOT_PASSWORD: root
+  #  ports:
+  #    - "3306:3306"
+  #  volumes:
+  #    - db-store:/var/lib/mysql
+  #    #- ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
+
+  #phpmyadmin:
+  #  container_name: test_phpmyadmin
+  #  image: phpmyadmin/phpmyadmin
+  #  environment:
+  #    - PMA_ARBITRARY=1
+  #    - PMA_HOSTS=mysql
+  #    - PMA_USER=testmsapi
+  #    - PMA_PASSWORD=root
+  #  ports:
+  #    - 8080:80
