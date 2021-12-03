@@ -43,8 +43,9 @@ namespace TestMSApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "eShopOnDapr - TestMSApi", Version = "v1" });
 
+                //identityUrl
                 var identityUrlExternal = Configuration.GetValue<string>("IdentityUrlExternal");
-
+                //AddSecurityDefinition
                 c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                 {
                     Type = SecuritySchemeType.OAuth2,
@@ -52,16 +53,20 @@ namespace TestMSApi
                     {
                         Implicit = new OpenApiOAuthFlow()
                         {
+                            //IdentityUrl Authorization
                             AuthorizationUrl = new Uri($"{identityUrlExternal}/connect/authorize"),
+                            //IdentityUrl Token
                             TokenUrl = new Uri($"{identityUrlExternal}/connect/token"),
+                            //Scope
                             Scopes = new Dictionary<string, string>()
                             {
+                                //Scopeñº   îCà”ÇÃê‡ñæ
                                 { "testms", "TestMS API" }
                             }
                         }
                     }
                 });
-
+                //OperationFilter
                 c.OperationFilter<AuthorizeCheckOperationFilter>();
             });
 
@@ -71,7 +76,9 @@ namespace TestMSApi
             services.AddAuthentication("Bearer")
                 .AddJwtBearer(options =>
                 {
+                    //ApiResourceñº
                     options.Audience = "testmsapi";
+                    //åüèÿêÊÅiIdentityUrlÅj
                     options.Authority = Configuration.GetValue<string>("IdentityUrl");
                     options.RequireHttpsMetadata = false;
                 });
@@ -81,6 +88,7 @@ namespace TestMSApi
                 options.AddPolicy("ApiScope", policy =>
                 {
                     policy.RequireAuthenticatedUser();
+                    //claimType=scope scopeñº=testms
                     policy.RequireClaim("scope", "testms");
                 });
             });
@@ -114,7 +122,9 @@ namespace TestMSApi
                 app.UseSwaggerUI(c => 
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "TestMSApi v1");
+                    //IdentityServerÇÃClientID
                     c.OAuthClientId("testmsswaggerui");
+                    //IdentityServerÇÃClientName
                     c.OAuthAppName("TestMS Swagger UI");
                 });
             }

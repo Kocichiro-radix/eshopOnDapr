@@ -20,6 +20,7 @@ namespace Microsoft.eShopOnDapr.Services.Identity.API
                 new ApiScope("basket", "Access to Basket API"),
                 new ApiScope("ordering", "Access to Ordering API"),
                 new ApiScope("shoppingaggr", "Access to Shopping Aggregator API"),
+                //scope名-Disp名
                 new ApiScope("testms", "Access to TestMS API"),
             };
     
@@ -39,10 +40,11 @@ namespace Microsoft.eShopOnDapr.Services.Identity.API
                 {
                     Scopes = { "shoppingaggr" }
                 },
+                //API名-Disp名
                 new ApiResource("testmsapi", "TestMS API")
                 {
+                    //scope名
                     Scopes = { "testms" }
-
                 }
             };
 
@@ -129,14 +131,19 @@ namespace Microsoft.eShopOnDapr.Services.Identity.API
                 },
                 new Client
                 {
+                    //id
                     ClientId = "testmsswaggerui",
+                    //表示名
                     ClientName = "TestMS Swagger UI",
+                    //暗黙 更新トークン等の高度な機能は無
                     AllowedGrantTypes = GrantTypes.Implicit,
+                    //クライアントがブラウザを介してアクセストークンを受信できるようにするかどうか
                     AllowAccessTokensViaBrowser = true,
-
+                    //トークンまたは認証コードを返すことができるURI
                     RedirectUris = { $"{configuration["TestMSApiUrlExternal"]}/swagger/oauth2-redirect.html" },
+                    //ログアウト後にリダイレクトできるURI
                     PostLogoutRedirectUris = { $"{configuration["TestMSApiUrlExternal"]}/swagger/" },
-
+                    //対応するスコープ名を追加して、許可されるリソースを指定
                     AllowedScopes =
                     {
                         "testms"
