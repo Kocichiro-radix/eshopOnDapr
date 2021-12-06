@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TestMSApi.Infrastructure;
+using TestMSApi.Infrastructure.Repositories;
 using TestMSApi.Models;
 
 namespace TestMSApi.Controllers
@@ -15,9 +16,11 @@ namespace TestMSApi.Controllers
     public class TodoItemController : ControllerBase
     {
         private readonly TodoContext _context;
-        public TodoItemController(TodoContext context)
+        private readonly IDaprMsTestStateRepository _repository;
+        public TodoItemController(TodoContext context, IDaprMsTestStateRepository repository)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _repository = repository;
         }
 
 
@@ -54,8 +57,13 @@ namespace TestMSApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var result = await _context.TodoItems.FirstOrDefaultAsync(a => a.Id == id);
-            return Ok(result);
+            var item = await _repository.GetAsync(id.ToString());
+            if(item == null)
+            {
+                item = await _context.TodoItems.FirstOrDefaultAsync(a => a.Id == id);
+                await _repository.UpdateAsync(item);
+            }
+            return Ok(item);
         }
     }
 }
