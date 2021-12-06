@@ -227,6 +227,7 @@ services:
       - IdentityUrl=http://identity-api
       - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
       - PORT=80
+      - SeqServerUrl=http://seq
       - SqlConnectionString=userid=docker_user;pwd=docker_pass;database=docker_db;server=mysql;
     ports:
       - "5380:80"
