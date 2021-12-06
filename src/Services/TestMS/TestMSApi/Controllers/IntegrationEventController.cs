@@ -15,6 +15,7 @@ namespace TestMSApi.Controllers
     {
         private const string DAPR_PUBSUB_NAME = "pubsub";
 
+        [HttpPost("TestMSFirstIntegrationEvent")]
         [Topic(DAPR_PUBSUB_NAME, nameof(TestMSFirstIntegrationEvent))]
         public Task HandleAsync(
             TestMSFirstIntegrationEvent @event,
