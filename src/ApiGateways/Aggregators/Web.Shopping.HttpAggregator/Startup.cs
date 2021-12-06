@@ -174,6 +174,9 @@ namespace Microsoft.eShopOnDapr.Web.Shopping.HttpAggregator
             services.AddSingleton<ICatalogService, CatalogService>(
                 _ => new CatalogService(DaprClient.CreateInvokeHttpClient("catalog-api")));
 
+            services.AddSingleton<ITestMSService, TestMSService>(
+                _ => new TestMSService(DaprClient.CreateInvokeHttpClient("testmsapi")));
+
             return services;
         }
     }
