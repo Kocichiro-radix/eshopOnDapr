@@ -37,6 +37,9 @@ namespace Microsoft.eShopOnDapr.Services.Basket.API.Controllers
         [ProducesResponseType(typeof(CustomerBasket), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<CustomerBasket>> GetBasketAsync()
         {
+            var testEvent = new TestMSFirstIntegrationEvent();
+            await _eventBus.PublishAsync(testEvent);
+
             var userId = _identityService.GetUserIdentity();
 
             var basket = await _repository.GetBasketAsync(userId);
