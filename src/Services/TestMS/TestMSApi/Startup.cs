@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.eShopOnDapr.BuildingBlocks.EventBus;
+using Microsoft.eShopOnDapr.BuildingBlocks.EventBus.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -15,6 +17,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TestMSApi.Infrastructure;
 using TestMSApi.Infrastructure.Filters;
+using TestMSApi.IntegrationEvents.EventHandling;
 using TestMSApi.Seed;
 
 namespace TestMSApi
@@ -102,7 +105,12 @@ namespace TestMSApi
                     .AllowAnyHeader()
                     .AllowCredentials());
             });
-            
+
+            services.AddScoped<IEventBus, DaprEventBus>();
+            //キャッチするイベントのDI
+            services.AddScoped<TestMSFirstIntegrationEventHandler>();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -132,6 +140,7 @@ namespace TestMSApi
             //app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCloudEvents();
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -141,6 +150,7 @@ namespace TestMSApi
             {
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapControllers();
+                endpoints.MapSubscribeHandler();
             });
         }
     }
