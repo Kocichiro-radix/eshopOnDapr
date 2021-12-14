@@ -22,7 +22,7 @@ jobs:
       - run: dotnet build $SolutionName
       #- run: dotnet test $SolutionName
           # Update this line with the directory that contains your tests project file
-          working_directory: ~/src/Services/TestMS/TestProject1
+          working_directory: ./src/Services/TestMS/TestProject1
           name: Run tests
           command: |
             dotnet test
