@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TestMSApi.Infrastructure;
 using TestMSApi.Infrastructure.Filters;
+using TestMSApi.Infrastructure.Repositories;
 using TestMSApi.IntegrationEvents.EventHandling;
 using TestMSApi.Seed;
 
@@ -109,7 +111,8 @@ namespace TestMSApi
             services.AddScoped<IEventBus, DaprEventBus>();
             //キャッチするイベントのDI
             services.AddScoped<TestMSFirstIntegrationEventHandler>();
-
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<IDaprMsTestStateRepository, DaprMsTestStateRepository>();
 
         }
 
