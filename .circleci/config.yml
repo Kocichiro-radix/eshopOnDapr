@@ -12,6 +12,7 @@ jobs:
     # Be sure to update the tag on this image to a more stable version, using latest can result in unstable builds.
     docker:
       - image: mcr.microsoft.com/dotnet/sdk:5.0
+      - image: docker:18.09-git
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
@@ -24,9 +25,6 @@ jobs:
       - setup_remote_docker:
           version: 17.11.0-ce
           docker_layer_caching: true
-      - run:
-          name: Docker クライアントのインストール
-          command: apk add docker-cli
       - run:
           name: Build
           command: docker build -t koichiroosakiradix/TestMsApi:latest ./src/Services/TestMS/TestMSApi
