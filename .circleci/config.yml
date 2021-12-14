@@ -21,11 +21,10 @@ jobs:
       - run: dotnet restore $SolutionName
       - run: dotnet build $SolutionName
       - run: dotnet test --no-build $SolutionName
-          # Update this line with the directory that contains your tests project file
-          #working_directory: ./src/Services/TestMS/TestProject1
-          #name: Run tests
-          #command: |
-            #dotnet test
+      - run:
+          name: Build
+          command: docker build -t koichiroosakiradix/TestMsApi:latest ./src/Services/TestMS/TestMSApi
+       
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
