@@ -11,7 +11,6 @@ jobs:
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     # Be sure to update the tag on this image to a more stable version, using latest can result in unstable builds.
     docker:
-      - image: mcr.microsoft.com/dotnet/sdk:5.0
       - image: cimg/python:3.9
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
@@ -22,13 +21,13 @@ jobs:
       - run: dotnet restore $SolutionName
       - run: dotnet build $SolutionName
       - run: dotnet test --no-build $SolutionName
-      - setup_remote_docker:
-          version: 17.11.0-ce
-          docker_layer_caching: true
+  docker-build:
+    docker:
+      - image: cimg/python:3.9
+    steps:
       - run:
           name: Build
           command: docker build -t koichiroosakiradix/TestMsApi:latest ./src/Services/TestMS/TestMSApi
-       
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -37,3 +36,4 @@ workflows:
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       - build-and-test
+      - docker-build
