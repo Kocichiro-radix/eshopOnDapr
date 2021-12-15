@@ -25,9 +25,10 @@ jobs:
     docker:
       - image: cimg/python:3.9
     steps:
+      - run: cd src/Services/TestMS/TestMSApi
       - run:
           name: Build
-          command: docker build -t koichiroosakiradix/testmsapi:latest ./src/Services/TestMS/TestMSApi
+          command: docker build -t koichiroosakiradix/testmsapi:latest .
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
