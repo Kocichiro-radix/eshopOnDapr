@@ -26,6 +26,9 @@ jobs:
       - image: cimg/python:3.9
     steps:
       - checkout
+      - setup_remote_docker:
+          version: 17.11.0-ce
+          docker_layer_caching: true
       - run:
           name: Build
           command: docker build -t koichiroosakiradix/testmsapi:latest ./src/Services/TestMS/TestMSApi
