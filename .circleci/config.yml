@@ -32,7 +32,7 @@ jobs:
       - run:
           name: Build
           command: |
-            COPY ["src/Services/TestMS/TestMSApi/Dockerfile", "./"]
+            cp src/Services/TestMS/TestMSApi/Dockerfile Dockerfile
             docker build -t koichiroosakiradix/testmsapi:latest .
 
 # Invoke jobs via workflows
