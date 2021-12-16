@@ -7,9 +7,9 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
-COPY ["nuget.config", "."]
+COPY ["NuGet.config", "."]
 COPY ["src/Services/TestMS/TestMSApi/TestMSApi.csproj", "src/Services/TestMS/TestMSApi/"]
-RUN dotnet restore "eShopOnDapr"
+RUN dotnet restore "src/Services/TestMS/TestMSApi/TestMSApi.csproj"
 COPY . .
 WORKDIR "/src/src/Services/TestMS/TestMSApi"
 RUN dotnet build "TestMSApi.csproj" -c Release -o /app/build
