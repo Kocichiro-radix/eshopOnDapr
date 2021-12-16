@@ -31,7 +31,9 @@ jobs:
           docker_layer_caching: true
       - run:
           name: Build
-          command: docker build -t koichiroosakiradix/catalogapi:latest ./src/Services/Catalog/Catalog.API
+          command: |
+            COPY ["src/Services/TestMS/TestMSApi/Dockerfile", "./"]
+            docker build -t koichiroosakiradix/testmsapi:latest .
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
