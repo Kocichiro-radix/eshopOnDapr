@@ -34,7 +34,7 @@ jobs:
           command: |
             cp src/Services/TestMS/TestMSApi/Dockerfile Dockerfile
             docker build -t koichiroosakiradix/testmsapi:latest .
-            $ echo "$MY_PASSWORD" | docker login --username koichiroosakiradix --password-stdin
+            echo $MY_PASSWORD | docker login --username koichiroosakiradix --password-stdin
             docker push koichiroosakiradix/testmsapi:latest
 
 # Invoke jobs via workflows
